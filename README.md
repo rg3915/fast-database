@@ -5,7 +5,7 @@ Exemplo de como inserir grande quantidade de dados da forma mais rápida num ban
 ## This project was done with:
 
 * Python 3.8.2
-* Django 2.2.12
+* Django 2.2.13
 
 ## How to run project?
 
@@ -28,7 +28,7 @@ python manage.py migrate
 ## Este projeto foi feito com:
 
 * Python 3.8.2
-* Django 2.2.12
+* Django 2.2.13
 
 ## Como rodar o projeto?
 
