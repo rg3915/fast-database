@@ -1,3 +1,7 @@
+# fast-database
+
+Exemplo de como inserir grande quantidade de dados da forma mais rápida num banco de dados PostgreSQL.
+
 ## This project was done with:
 
 * Python 3.8.2
