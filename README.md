@@ -15,6 +15,26 @@ Exemplo de como inserir grande quantidade de dados da forma mais rápida num ban
 * Install dependences.
 * Run the migrations.
 
+Create database:
+
+```
+# Caso exista um banco com este nome
+# dropdb -U postgres estoque_teste
+
+sudo su - postgres
+psql
+
+ CREATE ROLE rg3915 ENCRYPTED PASSWORD '1234' LOGIN;
+
+CREATE DATABASE estoque_teste OWNER rg3915;
+
+# Você pode se conectar no novo banco pra não precisar sair.
+\c estoque_teste
+
+\q  # sair
+```
+
+
 ```
 git clone https://github.com/rg3915/fast-database.git
 cd fast-database

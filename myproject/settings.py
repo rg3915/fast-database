@@ -87,7 +87,7 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'estoque',
+        'NAME': 'estoque_teste',
         'USER': 'rg3915',
         'PASSWORD': '1234',
         'HOST': 'localhost',
