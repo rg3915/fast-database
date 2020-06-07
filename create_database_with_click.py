@@ -1,32 +1,27 @@
 '''
-# create_database.py
+# create_database_with_click.py
 Create PostgreSQL database with Python.
 
 Usage:
-    python create_database.py -d dbname -u username
+    python create_database_with_click.py -d dbname -u username
 '''
-import argparse
+import click
 import subprocess
 
-description = 'Create PostgreSQL database with Python.'
-parser = argparse.ArgumentParser(description=description)
 
-
-parser.add_argument(
-    '-d',
-    '--database',
+@click.command()
+@click.option(
+    '-d', '--database',
     default='mydb',
+    prompt='Database name',
     help='Type the database name.'
 )
-
-parser.add_argument(
-    '-u',
-    '--user',
+@click.option(
+    '-u', '--user',
     default='myuser',
+    prompt='User name',
     help='Type the user name.'
 )
-
-
 def create_db(database, user):
     # Cria db
     subprocess.call(f"createdb -U postgres {database}", shell=True)
@@ -42,7 +37,4 @@ def create_db(database, user):
 
 
 if __name__ == '__main__':
-    args = parser.parse_args()
-    database = vars(args)['database']
-    user = vars(args)['user']
-    create_db(database, user)
+    create_db()
