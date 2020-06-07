@@ -6,6 +6,8 @@ import sys
 import django
 import timeit
 import subprocess
+from pathlib import Path
+
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "myproject.settings")
 django.setup()
@@ -27,30 +29,35 @@ def csv_to_list(filename: str) -> list:
 
 def insert_data_with_bulk_create(items):
     aux_list = []
-    tic2 = timeit.default_timer()
+    tic = timeit.default_timer()
     for item in items:
-        obj = Product(title=item['produto'], quantity=item['quantidade'])
+        obj = Product(title=item['title'], quantity=item['quantity'])
         aux_list.append(obj)
     Product.objects.bulk_create(aux_list)
-    toc2 = timeit.default_timer()
-    time2 = toc2 - tic2
-    return round((time2), 3)
+    toc = timeit.default_timer()
+    time = toc - tic
+    return round((time), 3)
 
 
-def timelog(total_items, _time, logfile):
+def timelog(total_items, _time, logfile, resource):
+    total_items = f'{total_items:,}'.replace(',', '.')
+    space = ' ' * (10 - len(total_items))
     time = round((_time), 3)
-    subprocess.call(f"printf '{total_items} \t -> {time}s\n' >> {logfile}", shell=True)
+    subprocess.call(f"printf '{total_items} {space} -> {time}s\t --> Inserindo {total_items} registros com {resource}.\n' >> {logfile}", shell=True)
 
 
 if __name__ == '__main__':
     logfile = 'time_log.txt'
 
+    home = str(Path.home())
     max_rows = 100000
 
-    data = csv_to_list(f'/tmp/produtos_{max_rows}.csv')
+    filename = f'{home}/dados/produtos_{max_rows}.csv'
 
-    time2 = insert_data_with_bulk_create(data)
+    data = csv_to_list(filename)
 
-    print(time2)
+    time = insert_data_with_bulk_create(data)
 
-    timelog(max_rows, time2, logfile)
+    print(time)
+
+    timelog(max_rows, time, logfile, 'Django bulk_create')
