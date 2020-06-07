@@ -121,7 +121,27 @@ source insert_with_shell_script.sh
 
 ## Links
 
+https://docs.python.org/3/howto/argparse.html
+
+https://gist.github.com/rg3915/a42163d57a72c07c9780c97df3063a36
+
 https://info.crunchydata.com/blog/fast-csv-and-json-ingestion-in-postgresql-with-copy
 
 https://hakibenita.com/fast-load-data-python-postgresql
+
+bulk_create
+
+https://docs.djangoproject.com/en/2.2/ref/models/querysets/#bulk-create
+
+Github: bulk_create
+
+https://github.com/django/django/blob/master/django/db/models/query.py#L455
+
+Github: Atomic transation
+
+https://github.com/django/django/blob/master/django/db/models/query.py#L491
+
+Database transactions
+
+https://docs.djangoproject.com/en/3.0/topics/db/transactions/
 
