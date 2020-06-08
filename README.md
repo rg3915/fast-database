@@ -68,51 +68,98 @@ python contrib/env_gen.py
 python manage.py migrate
 ```
 
+## Porque não usar sqlite?
+
+Faça um teste:
+
+```
+curl https://gist.githubusercontent.com/rg3915/b363f5c4a998f42901705b23ccf4b8e8/raw/5d0d1cc46d3a52bef6cd73d9d476140ad445be9e/boilerplatesimple.sh -o boilerplatesimple.sh
+```
+
+```
+source boilerplatesimple.sh
+```
+
+Crie um models
+
+```
+class Product(models.Model):
+    title = models.CharField('título', max_length=50)
+    quantity = models.PositiveIntegerField('quantidade')
+
+    class Meta:
+        verbose_name = 'produto'
+        verbose_name_plural = 'produtos'
+
+    def __str__(self):
+        return self.title
+```
+
+Abra shell
+
+```
+python manage.py shell_plus
+```
+
+E rode
+
+```
+title='notebook i3 SSD 8 Gb RAM'
+print(len(title))
+
+Product.objects.create(title=title)
+
+Product.objects.all()
+```
+
+Crie um banco
+
+```
+sudo su - postgres
+psql
+
+ CREATE ROLE rg3915 ENCRYPTED PASSWORD '1234' LOGIN;
+
+CREATE DATABASE estoque_teste OWNER rg3915;
+
+# Você pode se conectar no novo banco pra não precisar sair.
+\c estoque_teste
+
+\q  # sair
+```
+
+
+Edite o settings.py
+
+```
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'mydb',
+        'USER': 'rg3915',
+        'PASSWORD': '1234',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+```
+
+Abra o shell_plus novamente
+
+e insira os dados novamente.
+
+
+
 ## Rodando os notebooks
 
 ```
 python manage.py shell_plus --notebook
 ```
 
-## Usando Python e subprocess
-
-```
-import subprocess
-import timeit
-
-# Insere os dados
-filename = '/tmp/produtos_14000605.csv'  # ou produtos_14000605.csv
-
-copy_sql = f"COPY core_product (title, quantity) FROM '{filename}' CSV HEADER;"
-copy_psql = f'psql -U postgres -c "{copy_sql}" estoque_teste'
-
-tic = timeit.default_timer()
-subprocess.call(copy_psql, shell=True)
-toc = timeit.default_timer()
-print(round(toc - tic, 2), 'segundos')
-```
-
-
-```
-# Retorna os dados
-select_sql = "SELECT * FROM core_product LIMIT 5;"
-select_psql = f'psql -U postgres -c "{select_sql}" estoque_teste'
-subprocess.call(select_psql, shell=True)
-```
-
-
-```
-# Contando os registros
-count_sql = "SELECT COUNT(*) FROM core_product;"
-count_psql = f'psql -U postgres -c "{count_sql}" estoque_teste'
-subprocess.call(count_psql, shell=True)
-```
 ## Rodar fora do notebook
 
 ```
-python insert_with_create.py
 python insert_with_bulk_create.py
-python insert_with_psycopg2.py
 python insert_with_subprocess.py
 source insert_with_shell_script.sh
 ```
@@ -121,27 +168,21 @@ source insert_with_shell_script.sh
 
 ## Links
 
-https://docs.python.org/3/howto/argparse.html
+[boilerplatesimple](https://gist.github.com/rg3915/b363f5c4a998f42901705b23ccf4b8e8)
 
-https://gist.github.com/rg3915/a42163d57a72c07c9780c97df3063a36
+[argparse](https://docs.python.org/3/howto/argparse.html)
 
-https://info.crunchydata.com/blog/fast-csv-and-json-ingestion-in-postgresql-with-copy
+[read csv](https://gist.github.com/rg3915/a42163d57a72c07c9780c97df3063a36)
 
-https://hakibenita.com/fast-load-data-python-postgresql
+[Fast CSV and JSON Ingestion in PostgreSQL with COPY](https://info.crunchydata.com/blog/fast-csv-and-json-ingestion-in-postgresql-with-copy)
 
-bulk_create
+[Fastest Way to Load Data Into PostgreSQL Using Python](https://hakibenita.com/fast-load-data-python-postgresql)
 
-https://docs.djangoproject.com/en/2.2/ref/models/querysets/#bulk-create
+[bulk_create](https://docs.djangoproject.com/en/2.2/ref/models/querysets/#bulk-create)
 
-Github: bulk_create
+[Github: bulk_create](https://github.com/django/django/blob/master/django/db/models/query.py#L455)
 
-https://github.com/django/django/blob/master/django/db/models/query.py#L455
+[Github: Atomic transation](https://github.com/django/django/blob/master/django/db/models/query.py#L491)
 
-Github: Atomic transation
-
-https://github.com/django/django/blob/master/django/db/models/query.py#L491
-
-Database transactions
-
-https://docs.djangoproject.com/en/3.0/topics/db/transactions/
+[Database transactions](https://docs.djangoproject.com/en/3.0/topics/db/transactions/)
 
