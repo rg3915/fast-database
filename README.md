@@ -166,7 +166,7 @@ source insert_with_shell_script.sh
 
 ### Observações
 
-Se você inserir 14.000.605 registros com o método `insert_data_with_psycopg2` com `insert_one_by_one` pode demorar `15680` segundos, ou seja, `4.35` horas.
+Se você inserir 14.000.605 registros com o método `insert_data_with_psycopg2_one_by_one` pode demorar `15680` segundos, ou seja, `4.35` horas.
 
 
 ## Links
