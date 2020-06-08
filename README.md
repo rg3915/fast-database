@@ -249,3 +249,4 @@ SELECT * FROM product WHERE id < 1010 ORDER BY id DESC LIMIT 15;
 
 [Database transactions](https://docs.djangoproject.com/en/3.0/topics/db/transactions/)
 
+[Juliano Atanazio postgresql_sql_basico.pdf](https://github.com/juliano777/pgsql_fs2w/blob/master/postgresql_sql_basico.pdf)
