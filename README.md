@@ -161,7 +161,8 @@ python manage.py shell_plus --notebook
 ```
 python insert_with_bulk_create.py
 python insert_with_subprocess.py
-source insert_with_shell_script.sh
+source insert_with_shell_script.sh 1000000
+time python insert_data_benchmark.py --rows 10000
 ```
 
 ### Observações
