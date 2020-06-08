@@ -84,7 +84,7 @@ Crie um models
 
 ```
 class Product(models.Model):
-    title = models.CharField('título', max_length=50)
+    title = models.CharField('título', max_length=10)
     quantity = models.PositiveIntegerField('quantidade')
 
     class Meta:
@@ -104,7 +104,7 @@ python manage.py shell_plus
 E rode
 
 ```
-title='notebook i3 SSD 8 Gb RAM'
+title='Notebook i5 256Gb SSD 16Gb RAM'
 print(len(title))
 
 Product.objects.create(title=title)
