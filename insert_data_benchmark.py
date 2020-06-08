@@ -56,9 +56,9 @@ def main(rows):
     data = csv_to_list(filename)
 
     time1 = insert_data_with_bulk_create(items=data)
-    msg = 'Django bulk_create'
-    print(time1, msg)
-    timelog(int(rows), time1, logfile, msg)
+    msg1 = 'Django bulk_create'
+    print(time1, msg1)
+    timelog(int(rows), time1, logfile, msg1)
 
     connection = psycopg2.connect(
         host="localhost",
@@ -74,15 +74,18 @@ def main(rows):
     # print(time, msg)
     # timelog(int(rows), time, logfile, msg)
 
+    # ATENÇÃO: é tão lento quanto o one by one.
+    # LENTO: 100.000 registros -> 108.931s -> 1.8 min
+    # Para 14.000.605 -> 4.2 horas
     time2 = insert_data_with_psycopg2_executemany(connection, items=data)
-    msg = 'psycopg2 executemany'
-    print(time2, msg)
-    timelog(int(rows), time2, logfile, msg)
+    msg2 = 'psycopg2 executemany'
+    print(time2, msg2)
+    timelog(int(rows), time2, logfile, msg2)
 
-    time3 = insert_with_copy_from(connection, filename)
-    msg = 'psycopg2 copy_from'
-    print(time3, msg)
-    timelog(int(rows), time3, logfile, msg)
+    time3 = insert_data_with_copy_from(connection, filename)
+    msg3 = 'psycopg2 copy_from'
+    print(time3, msg3)
+    timelog(int(rows), time3, logfile, msg3)
 
     print('-' * 3)
     print('bulk_create vs copy_from:', round(
@@ -93,6 +96,31 @@ def main(rows):
         print('Win: psycopg2 copy_from')
 
     print('-' * 40)
+
+    time4 = insert_data_with_subprocess(filename)
+    msg4 = 'subprocess'
+    print(time4, msg4)
+    timelog(int(rows), time4, logfile, msg4)
+
+    print('-' * 3)
+    print('copy_from vs subprocess:', round(
+        time4 / time3, 2), 'vezes mais rápido.')
+    if time3 < time4:
+        print('Win: psycopg2 copy_from')
+    else:
+        print('Win: subprocess')
+
+    print('-' * 40)
+
+    smallest = min([time1, time2, time3, time4])
+    if smallest == time1:
+        print('Win:', time1, msg1)
+    if smallest == time2:
+        print('Win:', time2, msg2)
+    if smallest == time3:
+        print('Win:', time3, msg3)
+    if smallest == time4:
+        print('Win:', time4, msg4)
 
 
 def csv_to_list(filename: str) -> list:
@@ -173,13 +201,23 @@ def insert_data_with_psycopg2_executemany(connection, items):
     return round((time), 3)
 
 
-def insert_with_copy_from(connection, filename):
+def insert_data_with_copy_from(connection, filename):
     tic = timeit.default_timer()
     with open(filename, 'r') as f:
         next(f)
         connection.cursor().copy_from(
             f, 'core_product', sep=',', columns=('title', 'quantity')
         )
+    toc = timeit.default_timer()
+    time = toc - tic
+    return round((time), 3)
+
+
+def insert_data_with_subprocess(filename):
+    copy_sql = f"COPY core_product (title, quantity) FROM '{filename}' CSV HEADER;"
+    copy_psql = f'psql -U postgres -c "{copy_sql}" estoque_teste'
+    tic = timeit.default_timer()
+    subprocess.call(copy_psql, shell=True)
     toc = timeit.default_timer()
     time = toc - tic
     return round((time), 3)
