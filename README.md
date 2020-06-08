@@ -172,6 +172,63 @@ chmod +x insert_with_shell_script.sh
 Se você inserir 14.000.605 registros com o método `insert_data_with_psycopg2_one_by_one` pode demorar `15680` segundos, ou seja, `4.35` horas.
 
 
+## JSONField
+
+[Django JSONField](https://docs.djangoproject.com/en/3.0/ref/contrib/postgres/fields/#jsonfield)
+
+[PostgreSQL jsonb](https://www.postgresql.org/docs/current/functions-json.html)
+
+
+```
+# dropdb -U postgres dbteste
+createdb -U postgres dbteste
+
+sudo su - postgres
+psql dbteste
+
+CREATE TABLE product (id SERIAL PRIMARY KEY, title VARCHAR(100), quantity INTEGER, myjson JSONB);
+
+INSERT INTO product (title, quantity) 
+VALUES ('A', 1), 
+('B', 2), 
+('C', 3), 
+('D', 4), 
+('E', 5);
+
+# psql -U postgres -c "COPY product (title, quantity) FROM '$HOME/dados/produtos_1000.csv' CSV HEADER;" dbteste
+
+# DELETE FROM product;
+
+SELECT * FROM product;
+
+SELECT title, quantity, json_build_object('title', title, 'quantity', quantity) AS data FROM product;
+
+SELECT id, json_build_object('title', title, 'quantity', quantity) AS data FROM product;
+
+SELECT id::int, json_build_object('title', title, 'quantity', quantity) AS data FROM product;
+
+CREATE TEMP TABLE temptable AS
+  SELECT 1::int, '{"a":"b"}'::jsonb;
+
+CREATE TEMP TABLE temptable AS
+  SELECT id::int, json_build_object('title', title, 'quantity', quantity) AS data FROM product;
+
+SELECT * FROM temptable LIMIT 5;
+
+INSERT INTO product (id, myjson) (SELECT id, data FROM temptable);
+
+SELECT * FROM product ORDER BY id DESC LIMIT 5;
+
+UPDATE product t2
+SET myjson = t1.data
+FROM temptable t1
+WHERE t2.id = t1.id;
+
+SELECT * FROM product WHERE id > 997 LIMIT 6;
+
+SELECT * FROM product WHERE id < 1010 ORDER BY id DESC LIMIT 15;
+```
+
 ## Links
 
 [boilerplatesimple](https://gist.github.com/rg3915/b363f5c4a998f42901705b23ccf4b8e8)
