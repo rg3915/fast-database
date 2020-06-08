@@ -63,6 +63,11 @@ def main(rows):
     # print(time, msg)
     # timelog(int(rows), time, logfile, msg)
 
+    time = insert_data_with_psycopg2_executemany(items=data)
+    msg = 'psycopg2 executemany'
+    print(time, msg)
+    timelog(int(rows), time, logfile, msg)
+
 
 def csv_to_list(filename: str) -> list:
     '''
@@ -121,6 +126,38 @@ def insert_data_with_psycopg2_one_by_one(items):
 
     tic = timeit.default_timer()
     insert_one_by_one(connection, items)  # <--- insert data
+    toc = timeit.default_timer()
+    time = toc - tic
+    return round((time), 3)
+
+
+def insert_executemany(connection, items: Iterator[Dict[str, Any]]) -> None:
+    with connection.cursor() as cursor:
+        all_items = [{
+            'title': item['title'],
+            'quantity': int(item['quantity'])
+        } for item in items]
+
+        cursor.executemany("""
+            INSERT INTO core_product (title, quantity)
+            VALUES (
+                %(title)s,
+                %(quantity)s
+            );
+        """, all_items)
+
+
+def insert_data_with_psycopg2_executemany(items):
+    connection = psycopg2.connect(
+        host="localhost",
+        database="estoque_teste",
+        user="rg3915",
+        password="1234",
+    )
+    connection.autocommit = True
+
+    tic = timeit.default_timer()
+    insert_executemany(connection, items)  # <--- insert data
     toc = timeit.default_timer()
     time = toc - tic
     return round((time), 3)
