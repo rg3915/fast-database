@@ -50,15 +50,32 @@ def main(rows):
     home = str(Path.home())
     filename = f'{home}/dados/produtos_{rows}.csv'
 
+    if int(rows) >= 1000000:
+        total_items = f'{int(rows):,}'.replace(',', '.')
+        print(f'ATENÇÃO: Você está prestes a inserir {total_items} de registros.')
+        continuar = input('Deseja continuar? (y/N)')
+        if continuar != 'y':
+            return
+
     print('-' * 40)
-    print(f'> Inserindo {rows} registros.')
+    print(f'> Inserindo {int(rows):,} registros.'.replace(',', '.'))
 
+    print('Lendo o CSV...')
+    tic0 = timeit.default_timer()
     data = csv_to_list(filename)
+    toc0 = timeit.default_timer()
+    time0 = toc0 - tic0
+    print(round((time0), 3))
 
-    time1 = insert_data_with_bulk_create(items=data)
     msg1 = 'Django bulk_create'
-    print(time1, msg1)
-    timelog(int(rows), time1, logfile, msg1)
+    if int(rows) > 1000000:
+        print('[X] Desativando bulk_create...')
+        print('---')
+        time1 = 1000
+    else:
+        time1 = insert_data_with_bulk_create(items=data)
+        print(time1, msg1)
+        timelog(int(rows), time1, logfile, msg1)
 
     connection = psycopg2.connect(
         host="localhost",
@@ -77,24 +94,30 @@ def main(rows):
     # ATENÇÃO: é tão lento quanto o one by one.
     # LENTO: 100.000 registros -> 108.931s -> 1.8 min
     # Para 14.000.605 -> 4.2 horas
-    time2 = insert_data_with_psycopg2_executemany(connection, items=data)
+    time2 = 10000
     msg2 = 'psycopg2 executemany'
-    print(time2, msg2)
-    timelog(int(rows), time2, logfile, msg2)
+    if int(rows) > 100000:
+        if int(rows) >= 200000:
+            print('[X] Desativando psycopg2 executemany...')
+            print('---')
+        else:
+            print('ATENÇÃO: este processo é o mais lento e pode demorar horas.')
+            continuar = input('Deseja continuar? (y/N)')
+            if continuar == 'y':
+                print('Vamos tomar um cafézinho? ;)')
+                time2 = insert_data_with_psycopg2_executemany(
+                    connection, items=data)
+                print(time2, msg2)
+                timelog(int(rows), time2, logfile, msg2)
+            else:
+                print('Sábia escolha. =D')
 
     time3 = insert_data_with_copy_from(connection, filename)
     msg3 = 'psycopg2 copy_from'
     print(time3, msg3)
     timelog(int(rows), time3, logfile, msg3)
 
-    print('-' * 3)
-    print('bulk_create vs copy_from:', round(
-        time1 / time3, 2), 'vezes mais rápido.')
-    if time1 < time3:
-        print('Win: Django bulk_create')
-    else:
-        print('Win: psycopg2 copy_from')
-
+    print(winner1(time1, time3))
     print('-' * 40)
 
     time4 = insert_data_with_subprocess(filename)
@@ -102,25 +125,55 @@ def main(rows):
     print(time4, msg4)
     timelog(int(rows), time4, logfile, msg4)
 
+    print(winner2(time3, time4))
+    print('-' * 40)
+
+    winner, time_winner = winner_final(
+        [time1, time2, time3, time4],
+        [msg1, msg2, msg3, msg4]
+    )
+    print('O mais rápido é:')
+    print(winner)
+    print(time_winner, 's')
+
+
+def winner1(time1, time3):
+    '''
+    Retorna o campeão da primeira rodada.
+    '''
+    print('-' * 3)
+    print('bulk_create vs copy_from:', round(
+        time1 / time3, 2), 'vezes mais rápido.')
+    if time1 < time3:
+        return 'Win: Django bulk_create'
+    return 'Win: psycopg2 copy_from'
+
+
+def winner2(time3, time4):
+    '''
+    Retorna o campeão da segunda rodada.
+    '''
     print('-' * 3)
     print('copy_from vs subprocess:', round(
         time4 / time3, 2), 'vezes mais rápido.')
     if time3 < time4:
-        print('Win: psycopg2 copy_from')
-    else:
-        print('Win: subprocess')
+        return 'Win: psycopg2 copy_from'
+    return 'Win: subprocess'
 
-    print('-' * 40)
 
-    smallest = min([time1, time2, time3, time4])
-    if smallest == time1:
-        print('Win:', time1, msg1)
-    if smallest == time2:
-        print('Win:', time2, msg2)
-    if smallest == time3:
-        print('Win:', time3, msg3)
-    if smallest == time4:
-        print('Win:', time4, msg4)
+def winner_final(times: list, msg: list) -> tuple:
+    '''
+    Retorna o mais rápido de todos.
+    '''
+    smallest = min(times)
+    if smallest == times[0]:
+        return msg[0], times[0]
+    if smallest == times[1]:
+        return msg[1], times[1]
+    if smallest == times[2]:
+        return msg[2], times[2]
+    if smallest == times[3]:
+        return msg[3], times[3]
 
 
 def csv_to_list(filename: str) -> list:
