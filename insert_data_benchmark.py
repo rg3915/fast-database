@@ -52,21 +52,34 @@ def main(rows):
 
     data = csv_to_list(filename)
 
-    time = insert_data_with_bulk_create(items=data)
+    time1 = insert_data_with_bulk_create(items=data)
     msg = 'Django bulk_create'
-    print(time, msg)
-    timelog(int(rows), time, logfile, msg)
+    print(time1, msg)
+    timelog(int(rows), time1, logfile, msg)
+
+    connection = psycopg2.connect(
+        host="localhost",
+        database="estoque_teste",
+        user="rg3915",
+        password="1234",
+    )
+    connection.autocommit = True
 
     # ATENÇÃO: método demorado, não faça isso para grandes quantidades.
-    # time = insert_data_with_psycopg2_one_by_one(items=data)
+    # time = insert_data_with_psycopg2_one_by_one(connection, items=data)
     # msg = 'psycopg2 one by one'
     # print(time, msg)
     # timelog(int(rows), time, logfile, msg)
 
-    time = insert_data_with_psycopg2_executemany(items=data)
+    time2 = insert_data_with_psycopg2_executemany(connection, items=data)
     msg = 'psycopg2 executemany'
-    print(time, msg)
-    timelog(int(rows), time, logfile, msg)
+    print(time2, msg)
+    timelog(int(rows), time2, logfile, msg)
+
+    time3 = insert_with_copy_from(connection, filename)
+    msg = 'psycopg2 copy_from'
+    print(time3, msg)
+    timelog(int(rows), time3, logfile, msg)
 
 
 def csv_to_list(filename: str) -> list:
@@ -115,15 +128,7 @@ def insert_one_by_one(connection, items: Iterator[Dict[str, Any]]) -> None:
             })
 
 
-def insert_data_with_psycopg2_one_by_one(items):
-    connection = psycopg2.connect(
-        host="localhost",
-        database="estoque_teste",
-        user="rg3915",
-        password="1234",
-    )
-    connection.autocommit = True
-
+def insert_data_with_psycopg2_one_by_one(connection, items):
     tic = timeit.default_timer()
     insert_one_by_one(connection, items)  # <--- insert data
     toc = timeit.default_timer()
@@ -147,17 +152,21 @@ def insert_executemany(connection, items: Iterator[Dict[str, Any]]) -> None:
         """, all_items)
 
 
-def insert_data_with_psycopg2_executemany(items):
-    connection = psycopg2.connect(
-        host="localhost",
-        database="estoque_teste",
-        user="rg3915",
-        password="1234",
-    )
-    connection.autocommit = True
-
+def insert_data_with_psycopg2_executemany(connection, items):
     tic = timeit.default_timer()
     insert_executemany(connection, items)  # <--- insert data
+    toc = timeit.default_timer()
+    time = toc - tic
+    return round((time), 3)
+
+
+def insert_with_copy_from(connection, filename):
+    tic = timeit.default_timer()
+    with open(filename, 'r') as f:
+        next(f)
+        connection.cursor().copy_from(
+            f, 'core_product', sep=',', columns=('title', 'quantity')
+        )
     toc = timeit.default_timer()
     time = toc - tic
     return round((time), 3)
