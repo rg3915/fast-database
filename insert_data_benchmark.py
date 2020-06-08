@@ -50,6 +50,9 @@ def main(rows):
     home = str(Path.home())
     filename = f'{home}/dados/produtos_{rows}.csv'
 
+    print('-' * 40)
+    print(f'> Inserindo {rows} registros.')
+
     data = csv_to_list(filename)
 
     time1 = insert_data_with_bulk_create(items=data)
@@ -80,6 +83,16 @@ def main(rows):
     msg = 'psycopg2 copy_from'
     print(time3, msg)
     timelog(int(rows), time3, logfile, msg)
+
+    print('-' * 3)
+    print('bulk_create vs copy_from:', round(
+        time1 / time3, 2), 'vezes mais rápido.')
+    if time1 < time3:
+        print('Win: Django bulk_create')
+    else:
+        print('Win: psycopg2 copy_from')
+
+    print('-' * 40)
 
 
 def csv_to_list(filename: str) -> list:
