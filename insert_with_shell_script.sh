@@ -1,9 +1,10 @@
 tic=$(date +%s)
 echo $tic
+
 time psql -U postgres \
 -c "COPY core_product (title, quantity) 
-FROM '$HOME/dados/produtos_$1.csv' CSV HEADER;" \
-estoque_teste
+FROM '$HOME/dados/produtos_$1.csv' CSV HEADER;" estoque_teste
+
 toc=$(date +%s)
 echo $toc
 
