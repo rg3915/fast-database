@@ -1,0 +1,108 @@
+## 06/06/20
+
+1.000       -> 0.021s	 --> Gerando 1.000 registros.
+10.000      -> 0.124s	 --> Gerando 10.000 registros.
+100.000     -> 1.17s	 --> Gerando 100.000 registros.
+1.000.000   -> 11.603s	 --> Gerando 1.000.000 registros.
+14.000.605  -> 159.656s	 --> Gerando 14.000.605 registros.
+
+4           -> 0.011s	 --> Inserindo 4 registros com Django create.
+4           -> 0.004s	 --> Inserindo 4 registros com Django bulk_create.
+
+10.000      -> 16.281s	 --> Inserindo 10.000 registros com Django create.
+10.000      -> 0.403s	 --> Inserindo 10.000 registros com Django bulk_create.
+10.000      -> 112.735s	 --> Inserindo 10.000 registros com Gerando com names.
+10.000      -> 16.252s	 --> Inserindo 10.000 registros com Django create.
+10.000      -> 0.433s	 --> Inserindo 10.000 registros com Django bulk_create.
+100.000     -> 1248.481s	 --> Inserindo 100.000 registros com Gerando com names.
+100.000     -> 168.098s	 --> Inserindo 100.000 registros com Django create.
+100.000     -> 4.866s	 --> Inserindo 100.000 registros com Django bulk_create.
+10.000      -> 24.051s	 --> Inserindo 10.000 registros com psycopg2 one by one (with profile).
+10.000      -> 12.726s	 --> Inserindo 10.000 registros com psycopg2 one by one.
+10.000      -> 23.203s	 --> Inserindo 10.000 registros com psycopg2 executemany (with profile).
+10.000      -> 11.798s	 --> Inserindo 10.000 registros com psycopg2 executemany.
+10.000      -> 0.119s	 --> Inserindo 10.000 registros com psycopg2 copy_from (with profile).
+10.000      -> 0.058s	 --> Inserindo 10.000 registros com psycopg2 copy_from.
+10.000      -> 0.115s	 --> Inserindo 10.000 registros com subprocess.
+100.000     -> 0.381s	 --> Inserindo 100.000 registros com subprocess.
+COPY 100000
+100.000     -> 5.869s	 --> Inserindo 100.000 registros com Django bulk_create.
+
+## 08/06/20
+
+1.000       -> 0.069s	 --> Inserindo 1.000 registros com Django bulk_create.
+1.000       -> 0.086s	 --> Inserindo 1.000 registros com Django bulk_create.
+1.000       -> 0.977s	 --> Inserindo 1.000 registros com psycopg2 one by one.
+10.000      -> 0.359s	 --> Inserindo 10.000 registros com Django bulk_create.
+10.000      -> 10.942s	 --> Inserindo 10.000 registros com psycopg2 one by one.
+100.000     -> 4.539s	 --> Inserindo 100.000 registros com Django bulk_create.
+100.000     -> 112.338s	 --> Inserindo 100.000 registros com psycopg2 one by one.
+1.000       -> 0.064s	 --> Inserindo 1.000 registros com Django bulk_create.
+1.000       -> 1.122s	 --> Inserindo 1.000 registros com psycopg2 executemany.
+10.000      -> 0.341s	 --> Inserindo 10.000 registros com Django bulk_create.
+10.000      -> 11.216s	 --> Inserindo 10.000 registros com psycopg2 executemany.
+1.000       -> 0.061s	 --> Inserindo 1.000 registros com Django bulk_create.
+1.000       -> 0.963s	 --> Inserindo 1.000 registros com psycopg2 executemany.
+10.000      -> 0.346s	 --> Inserindo 10.000 registros com Django bulk_create.
+10.000      -> 10.673s	 --> Inserindo 10.000 registros com psycopg2 executemany.
+10.000      -> 0.054s	 --> Inserindo 10.000 registros com psycopg2 copy_from.
+100.000     -> 3.987s	 --> Inserindo 100.000 registros com Django bulk_create.
+100.000     -> 109.682s	 --> Inserindo 100.000 registros com psycopg2 executemany.
+100.000     -> 0.306s	 --> Inserindo 100.000 registros com psycopg2 copy_from.
+10.000      -> 0.4s	 --> Inserindo 10.000 registros com Django bulk_create.
+10.000      -> 10.762s	 --> Inserindo 10.000 registros com psycopg2 executemany.
+10.000      -> 0.055s	 --> Inserindo 10.000 registros com psycopg2 copy_from.
+10.000      -> 0.13s	 --> Inserindo 10.000 registros com subprocess COPY.
+100.000     -> 3.989s	 --> Inserindo 100.000 registros com Django bulk_create.
+100.000     -> 108.931s	 --> Inserindo 100.000 registros com psycopg2 executemany.
+100.000     -> 0.293s	 --> Inserindo 100.000 registros com psycopg2 copy_from.
+100.000     -> 0.37s	 --> Inserindo 100.000 registros com subprocess.
+---
+100.000     -> 4.048s	 --> Inserindo 100.000 registros com Django bulk_create.
+100.000     -> 0.253s	 --> Inserindo 100.000 registros com psycopg2 copy_from.
+100.000     -> 0.365s	 --> Inserindo 100.000 registros com subprocess.
+100.000     -> 5.226s	 --> Inserindo 100.000 registros com Django bulk_create.
+100.000     -> 0.292s	 --> Inserindo 100.000 registros com psycopg2 copy_from.
+100.000     -> 0.36s	 --> Inserindo 100.000 registros com subprocess.
+100.000     -> 5.442s	 --> Inserindo 100.000 registros com Django bulk_create.
+100.000     -> 0.356s	 --> Inserindo 100.000 registros com psycopg2 copy_from.
+100.000     -> 0.387s	 --> Inserindo 100.000 registros com subprocess.
+100.000     -> 5.288s	 --> Inserindo 100.000 registros com Django bulk_create.
+100.000     -> 0.28s	 --> Inserindo 100.000 registros com psycopg2 copy_from.
+100.000     -> 0.375s	 --> Inserindo 100.000 registros com subprocess.
+1.000.000   -> 44.793s	 --> Inserindo 1.000.000 registros com Django bulk_create.
+1.000.000   -> 2.526s	 --> Inserindo 1.000.000 registros com psycopg2 copy_from.
+1.000.000   -> 3.673s	 --> Inserindo 1.000.000 registros com subprocess.
+10.000      -> 10.757s	 --> Inserindo 10.000 registros com psycopg2 executemany.
+10.000      -> 11.292s	 --> Inserindo 10.000 registros com psycopg2 executemany.
+1.000.000   -> 41.146s	 --> Inserindo 1.000.000 registros com Django bulk_create.
+1.000.000   -> 2.482s	 --> Inserindo 1.000.000 registros com psycopg2 copy_from.
+1.000.000   -> 3.816s	 --> Inserindo 1.000.000 registros com subprocess.
+1.000.000   -> 43.752s	 --> Inserindo 1.000.000 registros com Django bulk_create.
+1.000.000   -> 2.844s	 --> Inserindo 1.000.000 registros com psycopg2 copy_from.
+1.000.000   -> 3.866s	 --> Inserindo 1.000.000 registros com subprocess.
+1.000.000   -> 2.572s	 --> Inserindo 1.000.000 registros com psycopg2 copy_from.
+1.000.000   -> 2.483s	 --> Inserindo 1.000.000 registros com psycopg2 copy_from.
+1.000.000   -> 3.32s	 --> Inserindo 1.000.000 registros com subprocess.
+100.000     -> 4.205s	 --> Inserindo 100.000 registros com Django bulk_create.
+100.000     -> 0.314s	 --> Inserindo 100.000 registros com psycopg2 copy_from.
+100.000     -> 0.376s	 --> Inserindo 100.000 registros com subprocess.
+100.000     -> 4.041s	 --> Inserindo 100.000 registros com Django bulk_create.
+100.000     -> 0.248s	 --> Inserindo 100.000 registros com psycopg2 copy_from.
+100.000     -> 0.305s	 --> Inserindo 100.000 registros com subprocess.
+1.000.000   -> 2.652s	 --> Inserindo 1.000.000 registros com psycopg2 copy_from.
+1.000.000   -> 4.098s	 --> Inserindo 1.000.000 registros com subprocess.
+1.000       -> 0.007s	 --> Inserindo 1.000 registros com psycopg2 copy_from.
+1.000       -> 0.065s	 --> Inserindo 1.000 registros com subprocess.
+1.000.000   -> 43.407s	 --> Inserindo 1.000.000 registros com Django bulk_create.
+1.000.000   -> 3.664s	 --> Inserindo 1.000.000 registros com psycopg2 copy_from.
+1.000.000   -> 3.682s	 --> Inserindo 1.000.000 registros com subprocess.
+14.000.605  -> 81.431s	 --> Inserindo 14.000.605 registros com psycopg2 copy_from.
+14.000.605  -> 142.263s	 --> Inserindo 14.000.605 registros com subprocess.
+14.000.605  -> 114.539s	 --> Inserindo 14.000.605 registros com psycopg2 copy_from.
+14.000.605  -> 161.292s	 --> Inserindo 14.000.605 registros com subprocess.
+14.000.605  -> 72.978s	 --> Inserindo 14.000.605 registros com psycopg2 copy_from.
+14.000.605  -> 164.676s	 --> Inserindo 14.000.605 registros com subprocess.
+1000000 	 --> 4 s 	 --> Inserindo 1000000 registros com Shell script
+14000605 	 --> 49 s 	 --> Inserindo 14000605 registros com Shell script.
+14000605 	 --> 45 s 	 --> Inserindo 14000605 registros com Shell script.

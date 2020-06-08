@@ -9,4 +9,4 @@ toc=$(date +%s)
 echo $toc
 
 totaltime=$(( $toc - $tic ))
-printf "$1 \t --> $totaltime s \t --> Inserindo $1 registros com Shell script.\n" >> time_log.txt
+printf "$1 \t -> $totaltime s \t --> Inserindo $1 registros com Shell script.\n" >> time_log.txt
