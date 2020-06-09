@@ -174,9 +174,9 @@ Se você inserir 14.000.605 registros com o método `insert_data_with_psycopg2_o
 ## Testes num servidor
 
 ```
-t2.medium
+t2.large
 vCPU: 2
-Memória: 4 Gb
+Memória: 8 Gb
 Volume: 20 Gb SSD
 ```
 
@@ -248,10 +248,15 @@ source .venv/bin/activate
 
 #### Clonar o projeto
 
-E rodar também
-
 ```
+git clone https://github.com/rg3915/fast-database.git
+cd fast-database
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -U pip
+pip install -r requirements.txt
+python contrib/env_gen.py
+python manage.py migrate
 ```
 
 Se der erros na instalação...
@@ -277,21 +282,75 @@ Por fim, faça novamente
 pip install -r requirements.txt
 ```
 
+E não esqueça de
+
+```
+python contrib/env_gen.py
+python manage.py migrate
+```
+
 Agora vamos testar os scripts no servidor
 
 Gerando os arquivos
 
 ```
-python create_csv.py --rows 
+mkdir ~/dados
+python create_csv.py --rows 1000
 ```
+
 
 Inserindo os dados
 
 ```
-time python insert_data_benchmark.py --rows 100000
+time python insert_data_benchmark.py --rows 1000
 
 chmod +x insert_with_shell_script.sh
-./insert_with_shell_script.sh 1000000
+./insert_with_shell_script.sh 1000
+```
+
+Editar `pg_hba.conf`
+
+sudo vim /etc/postgresql/10/main/pg_hba.conf
+
+E mude `peer` para `trust` em
+
+```
+# Database administrative login by Unix domain socket
+local   all             postgres                                peer
+```
+para
+
+```
+# Database administrative login by Unix domain socket
+local   all             postgres                                trust
+```
+
+Restart
+
+```
+sudo systemctl reload postgresql
+```
+
+
+Editar `insert_with_shell_script.sh` e trocar o usuário
+
+... mudar para
+
+```
+time psql -U postgres \
+...
+```
+
+Agora vamos tentar rodar novamente
+
+```
+./insert_with_shell_script.sh 1000
+```
+
+**Atenção:** não façam isso em produção!
+
+```
+psql -U postgres -c "DELETE FROM core_product;" estoque_teste
 ```
 
 
