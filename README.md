@@ -353,6 +353,11 @@ Agora vamos tentar rodar novamente
 psql -U postgres -c "DELETE FROM core_product;" estoque_teste
 ```
 
+3 brechas de segurança:
+
+* Com o pg_hba.conf modificado você consegue rodar um script sem senha.
+* NUNCA faça DELETE sem WHERE!
+* Comandos direto no terminal são muito perigosos. Faça um `script*.sh` e modifique as permissões de acesso ao arquivo com `chmod`. Acesso de usuário, senha, etc.
 
 
 ## JSONField
