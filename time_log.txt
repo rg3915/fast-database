@@ -106,3 +106,5 @@ COPY 100000
 1000000 	 --> 4 s 	 --> Inserindo 1000000 registros com Shell script
 14000605 	 --> 49 s 	 --> Inserindo 14000605 registros com Shell script.
 14000605 	 --> 45 s 	 --> Inserindo 14000605 registros com Shell script.
+300         -> 0.006s	 --> Gerando 300 registros.
+14.000.605  -> 198.788s	 --> Gerando 14.000.605 registros.

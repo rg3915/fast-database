@@ -171,6 +171,130 @@ chmod +x insert_with_shell_script.sh
 
 Se você inserir 14.000.605 registros com o método `insert_data_with_psycopg2_one_by_one` pode demorar `15680` segundos, ou seja, `4.35` horas.
 
+## Testes num servidor
+
+```
+t2.medium
+vCPU: 2
+Memória: 4 Gb
+Volume: 20 Gb SSD
+```
+
+#### Instalar PostgreSQL
+
+```
+sudo apt update
+sudo apt install -y postgresql-client postgresql curl wget git vim
+```
+
+#### Configurando alguns alias
+
+```
+alias h=history
+alias pir='pip install -r requirements.txt'
+alias sa='source .venv/bin/activate'
+alias m='python $VIRTUAL_ENV/../manage.py'
+```
+
+Você pode colocar isso no `~/.bashrc`. Veja meu `.bash_profile` no meu [gist](https://gist.github.com/rg3915/0a0b1e514d11fdbc44f1).
+
+#### Criando o banco de dados
+
+Gerar uma senha qualquer.
+
+```
+openssl rand -base64 32
+# ou
+date | md5sum
+```
+
+```
+sudo su - postgres
+psql
+
+ CREATE ROLE rg3915 ENCRYPTED PASSWORD '1234' LOGIN;
+
+CREATE DATABASE estoque_teste OWNER rg3915;
+
+# Você pode se conectar no novo banco pra não precisar sair.
+\c estoque_teste
+
+# Listar as tabelas
+\dt
+
+\q    # sair do banco
+exit  # sair do postgres
+```
+
+Poderia usar os scripts
+
+```
+python create_database.py -d dbname -u username
+# ou
+python create_database_with_click.py -d dbname -u username
+```
+
+
+#### Instalar python3-venv
+
+```
+python3 -V
+
+sudo apt install -y python3-venv
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+
+#### Clonar o projeto
+
+E rodar também
+
+```
+pip install -U pip
+```
+
+Se der erros na instalação...
+
+Erro:
+
+```
+...
+Using legacy setup.py install for memory-profiler, since package 'wheel' is not installed.
+...
+```
+
+O [memory-profiler](https://pypi.org/project/memory-profiler/) requer o [psutil](https://pypi.org/project/psutil/).
+
+```
+sudo apt install -y gcc python3-dev
+pip3 install psutil
+```
+
+Por fim, faça novamente
+
+```
+pip install -r requirements.txt
+```
+
+Agora vamos testar os scripts no servidor
+
+Gerando os arquivos
+
+```
+python create_csv.py --rows 
+```
+
+Inserindo os dados
+
+```
+time python insert_data_benchmark.py --rows 100000
+
+chmod +x insert_with_shell_script.sh
+./insert_with_shell_script.sh 1000000
+```
+
+
 
 ## JSONField
 
@@ -250,3 +374,7 @@ SELECT * FROM product WHERE id < 1010 ORDER BY id DESC LIMIT 15;
 [Database transactions](https://docs.djangoproject.com/en/3.0/topics/db/transactions/)
 
 [Juliano Atanazio postgresql_sql_basico.pdf](https://github.com/juliano777/pgsql_fs2w/blob/master/postgresql_sql_basico.pdf)
+
+[Video: PostgreSQL, Django, Docker, Schemas e PLPython com Juliano Atanazio](https://www.youtube.com/watch?v=ABGbZYY4e3o)
+
+[10 Ways to Generate a Random Password from the Linux Command Line](https://www.howtogeek.com/howto/30184/10-ways-to-generate-a-random-password-from-the-command-line/)
