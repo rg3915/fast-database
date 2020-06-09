@@ -120,10 +120,10 @@ psql
 
  CREATE ROLE rg3915 ENCRYPTED PASSWORD '1234' LOGIN;
 
-CREATE DATABASE estoque_teste OWNER rg3915;
+CREATE DATABASE mydb OWNER rg3915;
 
 # Você pode se conectar no novo banco pra não precisar sair.
-\c estoque_teste
+\c mydb
 
 \q  # sair
 ```
