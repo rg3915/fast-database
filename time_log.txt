@@ -108,3 +108,34 @@ COPY 100000
 14000605 	 --> 45 s 	 --> Inserindo 14000605 registros com Shell script.
 300         -> 0.006s	 --> Gerando 300 registros.
 14.000.605  -> 198.788s	 --> Gerando 14.000.605 registros.
+
+
+## 09/06/20
+
+4           -> 0.01s	 --> Inserindo 4 registros com Django create.
+4           -> 0.005s	 --> Inserindo 4 registros com Django bulk_create.
+4           -> 0.012s	 --> Inserindo 4 registros com Django create.
+4           -> 0.005s	 --> Inserindo 4 registros com Django bulk_create.
+10.000      -> 148.387s	 --> Inserindo 10.000 registros com Gerando com names.
+10.000      -> 18.628s	 --> Inserindo 10.000 registros com Django create.
+10.000      -> 0.516s	 --> Inserindo 10.000 registros com Django bulk_create.
+100.000     -> 0.532s	 --> Inserindo 100.000 registros com Django bulk_create.
+100.000     -> 5.126s	 --> Inserindo 100.000 registros com Django bulk_create.
+100.000     -> 5.235s	 --> Inserindo 100.000 registros com Django bulk_create.
+10.000      -> 23.305s	 --> Inserindo 10.000 registros com psycopg2 one by one (with profile).
+10.000      -> 11.829s	 --> Inserindo 10.000 registros com psycopg2 one by one.
+10.000      -> 23.634s	 --> Inserindo 10.000 registros com psycopg2 executemany (with profile).
+10.000      -> 11.921s	 --> Inserindo 10.000 registros com psycopg2 executemany.
+10.000      -> 0.092s	 --> Inserindo 10.000 registros com psycopg2 copy_from (with profile).
+10.000      -> 0.071s	 --> Inserindo 10.000 registros com psycopg2 copy_from.
+10.000      -> 0.109s	 --> Inserindo 10.000 registros com subprocess.
+10.000      -> 0.106s	 --> Inserindo 10.000 registros com subprocess.
+10000 	 -> 0 s 	 --> Inserindo 10000 registros com Shell script.
+10000 	 -> 0 s 	 --> Inserindo 10000 registros com Shell script.
+100000 	 -> 1 s 	 --> Inserindo 100000 registros com Shell script.
+1000000 	 -> 3 s 	 --> Inserindo 1000000 registros com Shell script.
+14.000.605  -> 68.073s	 --> Inserindo 14.000.605 registros com psycopg2 copy_from.
+14.000.605  -> 78.708s	 --> Inserindo 14.000.605 registros com subprocess.
+14.000.605  -> 87.416s	 --> Inserindo 14.000.605 registros com psycopg2 copy_from.
+14.000.605  -> 110.157s	 --> Inserindo 14.000.605 registros com subprocess.
+14000605 	 -> 110 s 	 --> Inserindo 14000605 registros com Shell script.

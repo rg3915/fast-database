@@ -54,6 +54,7 @@ if __name__ == '__main__':
 
     filename = f'{home}/dados/produtos_{max_rows}.csv'
 
+    # Consome memória
     data = csv_to_list(filename)
 
     time = insert_data_with_bulk_create(data)
