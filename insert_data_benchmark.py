@@ -166,14 +166,9 @@ def winner_final(times: list, msg: list) -> tuple:
     Retorna o mais rápido de todos.
     '''
     smallest = min(times)
-    if smallest == times[0]:
-        return msg[0], times[0]
-    if smallest == times[1]:
-        return msg[1], times[1]
-    if smallest == times[2]:
-        return msg[2], times[2]
-    if smallest == times[3]:
-        return msg[3], times[3]
+    position = times.index(smallest)
+
+    return msg[position], smallest
 
 
 def csv_to_list(filename: str) -> list:
