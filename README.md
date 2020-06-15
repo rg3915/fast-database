@@ -417,6 +417,13 @@ SELECT * FROM product WHERE id > 997 LIMIT 6;
 SELECT * FROM product WHERE id < 1010 ORDER BY id DESC LIMIT 15;
 ```
 
+Descobri uma solução melhor para o jsonb:
+
+```
+UPDATE product
+SET myjson = json_build_object('title', title, 'quantity', quantity);
+```
+
 ## Links
 
 [boilerplatesimple](https://gist.github.com/rg3915/b363f5c4a998f42901705b23ccf4b8e8)
