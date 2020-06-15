@@ -424,6 +424,8 @@ UPDATE product
 SET myjson = json_build_object('title', title, 'quantity', quantity);
 ```
 
+com isso não precisa de tabela auxiliar.
+
 ## Links
 
 [boilerplatesimple](https://gist.github.com/rg3915/b363f5c4a998f42901705b23ccf4b8e8)
